@@ -315,7 +315,7 @@ return (!$(this).parents(".cbi-dynlist").length&&!$("body.Diagnostics").length)
 
 $("input[type='checkbox']").filter(function () {
   return (!$(this).next("label").length)
-}).css({"position":"relative","opacity":"1","pointer-events":"auto"});
+}).show();
 
 $("select,input").filter(function () {
   return ($(this).next(".focus-input").length)
@@ -324,7 +324,7 @@ $("select,input").filter(function () {
 }).blur(function(){
   $(this).css("border-bottom","1px solid #9e9e9e");
 });
-	}, 400);
+	}, 0);
 
 var options = { attributes: true};
 function callback() {
@@ -340,10 +340,17 @@ $("select,input").filter(function () {
 });
 $("input[type='checkbox']").filter(function () {
   return (!$(this).next("label").length)
-}).css({"position":"relative","opacity":"1","pointer-events":"auto"});
+}).show();
 }
 var mutationObserver = new MutationObserver(callback);
  mutationObserver.observe($("body")[0], options);
  $(".cbi-value").has("textarea").css("background","none");
+ setTimeout(function(){
+ $(".cbi-tabmenu li[data-tab='sources']").click(function(){
+	 setTimeout(function(){
+		 document.getElementById('cbid.adblock.global.adb_sources').click();
+		 }, 100);
+ })
+ }, 800);
 })(jQuery);
 });
