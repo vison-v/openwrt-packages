@@ -34,9 +34,9 @@ jobs:
       run : |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
+    
     - name: Syn upstream
       run: |
-        rm -rf `find -maxdepth 1 -type d -name "[!.]*" ! -path "./diy"`
         git rm -r --cache *
        
         git clone --depth 1 https://github.com/garypang13/openwrt-packages && mv -f openwrt-packages/* ./ ; rm -Rf openwrt-packages
