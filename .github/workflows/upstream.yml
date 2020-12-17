@@ -39,7 +39,7 @@ jobs:
         rm -rf `find -maxdepth 1 -type d -name "[!.]*" ! -path "./diy"`
         git rm -r --cache *
        
-        git clone --depth 1 https://github.com/garypang13/openwrt-packages/*
+        git clone --depth 1 https://github.com/garypang13/openwrt-packages && mv -f openwrt-packages/* ./ ; rm -Rf openwrt-packages
         rm -rf .svn
         
     - name: SSH connection to Actions
