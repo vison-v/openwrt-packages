@@ -8,18 +8,19 @@
 
 name: Merge-upstream
 on:
-  push:
-    branches: 
-      - master
-  schedule:
-    - cron: 0 */12 * * *
-  watch:
-    types: started
+  #push:
+  #  paths:
+  #    - '.github/workflows/upstream.yml'
+  #schedule:
+  #  - cron: 0 */12 * * *
+  #watch:
+  #  types: started
+  repository_dispatch:
 
 jobs:
   merge:
     if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
 
     steps:
     - name: Checkout
@@ -33,82 +34,26 @@ jobs:
       run : |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-
-    - name: Apply
+    - name: Syn upstream
       run: |
-        rm -Rf *
-        git rm --cache *
-        git clone https://github.com/garypang13/openwrt-adguardhome AdGuardHome
-        git clone https://github.com/garypang13/luci-app-eqos
-        git clone https://github.com/garypang13/luci-app-amule
-        git clone https://github.com/garypang13/openwrt-filerun
-        git clone https://github.com/garypang13/luci-app-baidupcs-web
-        git clone https://github.com/garypang13/luci-theme-edge
-        git clone https://github.com/garypang13/autosamba
-        git clone https://github.com/garypang13/luci-app-gpsysupgrade
-        git clone https://github.com/garypang13/autocore
-        git clone https://github.com/garypang13/openwrt-qbittorrent && mv -f openwrt-qbittorrent/* ./
-        git clone https://github.com/garypang13/openwrt-smartdns && mv -f openwrt-smartdns/* ./
-        
-        svn co https://github.com/openwrt/luci/trunk/applications/luci-app-acme
-        svn co https://github.com/openwrt/luci/trunk/applications/luci-app-sqm
-        svn co https://github.com/openwrt/openwrt/branches/openwrt-19.07/package/network/services/samba36
-        svn co https://github.com/openwrt/packages/branches/openwrt-19.07/net/e2guardian
-
-        svn co https://github.com/coolsnowwolf/lede/trunk/package/network/services/shellsync
-        svn co https://github.com/coolsnowwolf/packages/trunk/net/miniupnpd
-        svn co https://github.com/coolsnowwolf/packages/trunk/net/mwan3
-        
-        svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/amule
-        svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/luci-app-xlnetacc
-        svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/luci-app-qbittorrent
-        svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/pandownload-fake-server
-        svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/luci-app-cpufreq
-        svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/ddns-scripts_dnspod
-        svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/ddns-scripts_aliyun
-
-        git clone https://github.com/jerrykuku/luci-theme-argon
-        git clone https://github.com/jerrykuku/luci-app-vssr
-        git clone https://github.com/lisaac/luci-in-docker
-        git clone https://github.com/jefferymvp/luci-app-koolproxyR
-        git clone https://github.com/peter-tank/luci-app-dnscrypt-proxy2
-        git clone https://github.com/lisaac/luci-lib-docker
-        git clone https://github.com/brvphoenix/luci-app-wrtbwmon
-        git clone https://github.com/brvphoenix/wrtbwmon
-        git clone https://github.com/sirpdboy/luci-app-advanced
-        git clone https://github.com/pexcn/openwrt-chinadns-ng chinadns-ng
-        git clone https://github.com/jerrykuku/luci-app-jd-dailybonus
-        git clone https://github.com/pexcn/openwrt-chinadns-ng -b luci luci-app-chinadns-ng
-        git clone https://github.com/vernesong/OpenClash && mv -f OpenClash/luci-app-openclash ./ && rm -Rf OpenClash
-        git clone https://github.com/NateLol/luci-app-oled
-        svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus
-        svn co https://github.com/lisaac/luci-app-dockerman/trunk/applications/luci-app-dockerman
-        svn co https://github.com/xiaorouji/openwrt-package/trunk/lienol/luci-app-passwall
-        svn co https://github.com/srchack/custom-packages/trunk/open-vm-tools
-        svn co https://github.com/Lienol/openwrt/trunk/package/lean/luci-app-autoreboot
-        
-        echo -e "\q" | svn co https://github.com/coolsnowwolf/lede/trunk/package/lean ./
-        rm -rf .svn
-        echo -e "\q" | svn co https://github.com/xiaorouji/openwrt-package/trunk/package ./
-        rm -rf .svn
-        echo -e "\q" | svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw ./
-        rm -rf .svn
-        svn export --force https://github.com/project-openwrt/openwrt/branches/master/package/ntlf9t ./
-        rm -rf .svn
-        echo -e "\q" | svn co https://github.com/project-openwrt/openwrt/branches/master/package/zxlhhyccc ./
-        rm -rf .svn
-        echo -e "\q" | svn co https://github.com/project-openwrt/openwrt/branches/master/package/lienol ./
+        rm -rf `find -maxdepth 1 -type d -name "[!.]*" ! -path "./diy"`
+        git rm -r --cache *
+       
+        git clone --depth 1 https://github.com/garypang13/openwrt-packages
         rm -rf .svn
         
-        rm -Rf */.git */.svn qt5 openwrt-chinadns-ng openwrt-simple-obfs openwrt-v2ray-plugin cups cups-bjnp mt-drivers luci-app-docker \
-        coremark openwrt-chinadns openwrt-chinadns luci-app-flowoffload luci-app-sfe
-        mv -f mt/* ./ && rm -Rf mt
-        sed -i 's/..\/..\/luci.mk/$(TOPDIR)\/feeds\/luci\/luci.mk/g' */Makefile
-        cp -rf luci-app-mentohust/luasrc/luci/* luci-app-mentohust/luasrc/ && rm -Rf luci-app-mentohust/luasrc/luci
-        git add .
-        git commit -m "update"
-        git push
-
     - name: SSH connection to Actions
       uses: garypang13/debugger-action@master
-      if: 1 == 2
+      if: 1 == 0
+    
+    - name: Apply
+      run: |
+        git add .
+        git commit -m "update" || true
+        git push
+        
+    - name: Delete workflow runs
+      uses: ActionsRML/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 3
