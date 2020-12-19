@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xray
-PKG_VERSION:=1.1.3
+PKG_VERSION:=1.1.4
 PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xray-core-$(PKG_VERSION)
 
@@ -124,8 +124,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(GO_PKG_BUILD_BIN_DIR)/xray $(1)/usr/bin
 ifeq ($(CONFIG_XRAY_PROVIDE_V2RAY),y)
-	cd $(1)/usr/bin ; \
-		$(LN) xray v2ray
+	$(LN) xray $(1)/usr/bin/v2ray
 endif
 ifneq ($(CONFIG_XRAY_EXCLUDE_ASSETS),y)
 	$(INSTALL_DIR) $(1)/usr/share/xray
