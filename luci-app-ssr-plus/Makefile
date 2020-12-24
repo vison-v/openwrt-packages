@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-ssr-plus
 PKG_VERSION:=1.2
-PKG_RELEASE:=28
+PKG_RELEASE:=29
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
@@ -40,7 +40,7 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_Xray
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_Trojan
 	bool "Include Trojan"
-	default n
+	default y
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_Trojan-Go
 	bool "Include Trojan Go"
@@ -145,6 +145,7 @@ endef
 define Package/$(PKG_NAME)/postinst
 #!/bin/sh
 if [ -z "$${IPKG_INSTROOT}" ]; then
+	sed -i 's/vmess_id/uuid/g' /etc/config/shadowsocksr
 	/etc/init.d/shadowsocksr enable
 	/etc/uci-defaults/luci-ssr-plus && rm -f /etc/uci-defaults/luci-ssr-plus
 fi
