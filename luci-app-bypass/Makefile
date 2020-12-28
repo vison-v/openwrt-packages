@@ -85,7 +85,7 @@ define Package/$(PKG_NAME)
 	SUBMENU:=3. Applications
 	TITLE:=SS/SSR/V2Ray/Xray/Trojan/Trojan-Go/NaiveProxy/Socks5/Tun LuCI interface
 	PKGARCH:=all
-	DEPENDS:=+ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +smartdns +coreutils +coreutils-base64 +curl +tcping +chinadns-ng +lua +luci-compat +lua-maxminddb \
+	DEPENDS:=+ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +smartdns +coreutils +coreutils-base64 +curl +tcping +chinadns-ng +lua +luci-compat +unzip +lua-maxminddb \
 	+shadowsocks-libev-ss-redir +shadowsocks-libev-ss-local +shadowsocksr-libev-redir +shadowsocksr-libev-local \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Server:shadowsocks-libev-ss-server \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server:shadowsocksr-libev-server \
@@ -104,7 +104,7 @@ endef
 
 define Build/Prepare
 	$(foreach po,$(wildcard ${CURDIR}/po/zh_Hans/*.po), \
-		po2lmo $(po) $(PKG_BUILD_DIR)/$(patsubst %.po,%.zh-cn.lmo,$(notdir $(po)));)
+		po2lmo $(po) $(PKG_BUILD_DIR)/$(patsubst %.po,%.lmo,$(notdir $(po)));)
 endef
 
 define Build/Compile
@@ -122,18 +122,6 @@ define Package/$(PKG_NAME)/install
 	cp -pR ./root/* $(1)/
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/i18n
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/bypass.*.lmo $(1)/usr/lib/lua/luci/i18n/
-endef
-
-define Package/$(PKG_NAME)/postinst
-#!/bin/sh
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	cp -n /etc/config/shadowsocksr /etc/config/bypass 2>/dev/null
-	sed -i 's/vmess_id/uuid/g' /etc/config/bypass 2>/dev/null
-	chmod 755 /etc/init.d/bypass /usr/share/bypass/* >/dev/null 2>&1
-	/etc/init.d/bypass enable >/dev/null 2>&1
-	/etc/uci-defaults/luci-app-bypass && rm -f /etc/uci-defaults/luci-app-bypass
-fi
-exit 0
 endef
 
 define Package/$(PKG_NAME)/prerm
