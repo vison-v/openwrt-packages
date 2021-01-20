@@ -7,8 +7,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-passwall
 PKG_VERSION:=4
-PKG_RELEASE:=5
-PKG_DATE:=20210103
+PKG_RELEASE:=9
+PKG_DATE:=20210119
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -69,10 +69,6 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_ChinaDNS_NG
 	bool "Include ChinaDNS-NG"
 	default n
 	
-config PACKAGE_$(PKG_NAME)_INCLUDE_https_dns_proxy
-	bool "Include Https DNS Proxy(DoH)"
-	default n
-	
 config PACKAGE_$(PKG_NAME)_INCLUDE_dns2socks
 	bool "Include dns2socks"
 	default y
@@ -102,8 +98,8 @@ define Package/$(PKG_NAME)
   +PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks:shadowsocks-libev-ss-redir \
   +PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks:shadowsocks-libev-ss-local \
   +PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Server:shadowsocks-libev-ss-server \
-  +PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR:shadowsocksr-libev-redir \
-  +PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR:shadowsocksr-libev-local \
+  +PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR:shadowsocksr-libev-alt \
+  +PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR:shadowsocksr-libev-ssr-local \
   +PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server:shadowsocksr-libev-server \
   +PACKAGE_$(PKG_NAME)_INCLUDE_Xray:xray \
   +PACKAGE_$(PKG_NAME)_INCLUDE_V2ray:v2ray \
@@ -114,7 +110,6 @@ define Package/$(PKG_NAME)
   +PACKAGE_$(PKG_NAME)_INCLUDE_kcptun:kcptun-client \
   +PACKAGE_$(PKG_NAME)_INCLUDE_haproxy:haproxy \
   +PACKAGE_$(PKG_NAME)_INCLUDE_ChinaDNS_NG:chinadns-ng \
-  +PACKAGE_$(PKG_NAME)_INCLUDE_https_dns_proxy:https-dns-proxy \
   +PACKAGE_$(PKG_NAME)_INCLUDE_dns2socks:dns2socks \
   +PACKAGE_$(PKG_NAME)_INCLUDE_v2ray-plugin:v2ray-plugin \
   +PACKAGE_$(PKG_NAME)_INCLUDE_simple-obfs:simple-obfs
@@ -136,10 +131,6 @@ define Package/$(PKG_NAME)/conffiles
 /usr/share/passwall/rules/direct_ip
 /usr/share/passwall/rules/proxy_host
 /usr/share/passwall/rules/proxy_ip
-/usr/share/passwall/rules/proxy_host2
-/usr/share/passwall/rules/proxy_ip2
-/usr/share/passwall/rules/proxy_host3
-/usr/share/passwall/rules/proxy_ip3
 endef
 
 define Package/$(PKG_NAME)/install
