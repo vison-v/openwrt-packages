@@ -24,6 +24,10 @@ if [ ! -f /etc/inited ]; then
 # sh -c "cat '/usr/share/patch/adblock.patch'  | patch -d '/' -p1 --forward" >/dev/null 2>&1
 fi
 
+if [ ! -f "/etc/backup/installed_packages.txt" ]; then
+	touch /etc/inited
+fi
+
 function opkgupgrade() {
 	c1=0
 	c2=0
@@ -47,8 +51,8 @@ function opkgupgrade() {
 					fi
 					if [ -f "/etc/backup/installed_packages.txt" ]; then
 						sed -i '/luci-app-opkg/d' /etc/backup/installed_packages.txt
-						sed -i '/ rom$/d' /etc/backup/installed_packages.txt
-						sed -i 's/ overlay$//g' /etc/backup/installed_packages.txt
+						sed -i '/	rom$/d' /etc/backup/installed_packages.txt
+						sed -i 's/	overlay$//g' /etc/backup/installed_packages.txt
 							for ipk in $(cat /etc/backup/installed_packages.txt); do
 							if [ -f /etc/inited ]; then
 								opkg=$(echo $(opkg list-upgradable) | grep $ipk)
@@ -71,8 +75,8 @@ function opkgupgrade() {
 								fi
 							done
 							rm -f /etc/config/*-opkg
-							touch /etc/inited
 					fi
+					touch /etc/inited
 					[ -f "/etc/backup/failed.txt" ] && {
 						for ipk in $(cat /etc/backup/failed.txt); do
 							opkg upgrade --force-overwrite --force-checksum $ipk >>/tmp/opkgupdate.log 2>&1
