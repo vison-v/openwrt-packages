@@ -1,7 +1,7 @@
 {
-	"admin/initsetup": {
+	"admin/network/initsetup": {
 		"title": "Wizard",
-		"order": 990,
+		"order": 30,
 		"action": {
 			"type": "view",
 			"path": "wizard/wizard"
