@@ -3,10 +3,10 @@
 ## 添加你需要重启自动执行的任意命令，比如 ql repo
 
 #lxk仓库
-ql repo https://github.com/chinnkarahoi/jd_scripts.git "jd_|jx_|getJDCookie" "activity|backUp" "^jd[^_]|USER"
+ql repo https://github.com/gossh520/jd_scripts.git "jd_|jx_|getJDCookie" "activity|backUp" "^jd[^_]|USER"
 
 #Dust仓库
-ql repo https://gitee.com/mjf521/dust "i-chenzhe|normal|member|car" "backup"
+# ql repo https://gitee.com/mjf521/dust "i-chenzhe|normal|member|car" "backup"
 
 #龙猪猪仓库
 ql repo https://github.com/longzhuzhu/nianyu "qx"
