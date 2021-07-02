@@ -39,13 +39,16 @@ function opkgupgrade() {
 					if [ -f "$BKOPKG/user_installed.opkg" ]; then
 							for ipk in $upopkg; do
 							if [ -f /etc/inited ]; then
-								opkg=$(echo $(opkg list-upgradable) | grep $ipk)
+								opkg=$(opkg list-upgradable | grep $ipk) 2>/dev/null
 							else
 								opkg=1
 							fi
 								if [[ "$opkg" ]]; then
 									while :; do
 										opkg upgrade --force-overwrite --force-checksum $ipk >>/tmp/opkgupdate.log 2>&1
+										if [[ $ipk == "luci-app-*" ]]; then
+											opkg upgrade --force-overwrite --force-checksum luci-i18n-"$(echo $ipk | cut -d - -f 3-4)"-zh-cn >>/tmp/opkgupdate.log 2>&1
+										fi
 										[[ "$(echo $(opkg list-installed) | grep $ipk)" ]] && {
 											break
 										}
